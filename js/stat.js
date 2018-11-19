@@ -39,6 +39,39 @@ function renderCloud(ctx, x, y, color) {
   ctx.fill();
 }
 
+function getColor(color, modificator) {
+  if (color[0] === '#') {
+    var newColor = color.slice(1);
+    var newColorArr = [];
+
+    if (newColor.length < 6) {
+      return '#000000';
+    }
+
+    for (var i = 0; i < newColor.length; i += 2) {
+      newColorArr.push(newColor.substr(i,2));
+    }
+
+    for (var j = 0; j < newColorArr.length; j++) {
+      newColorArr[j] = Math.round(parseInt(newColorArr[j],16) * modificator);
+      newColorArr[j] = (newColorArr[j]).toString(16);
+
+      if (newColorArr[j].length < 2) {
+        newColorArr[j] = '0' + newColorArr[j];
+      }
+
+      if (newColorArr[j].length > 2) {
+        newColorArr[j] = newColorArr[j].slice(1);
+      }
+    }
+
+    return '#' + newColorArr.join('');
+
+  } else {
+    return '#000000';
+  }
+}
+
 function renderText(ctx, x, y, arr, color) {
   for (var i = 0; i < arr.length; i++) {
     if (color) {
@@ -59,18 +92,11 @@ function renderRect(ctx, x, y, width, height, color) {
   ctx.fillRect(x, y, width, height);
 }
 
-var timesArr = [5000, 7000, 9000, 4000, 6000];
-
 window.renderStatistics = function (ctx, players, times) {
-  players = timesArr;
-  console.log(players.length, times.length);
-  console.log(players.length !== times.length);
   if (players.length !== times.length) {
-    players.lenght = 4;
-    times.length = 4;
+    players.length = times.length = Math.min(players.length, times.length);
   }
 
-  console.log(players);
   renderCloud(ctx, CLOUD_X + GAP, CLOUD_Y + GAP, 'rgba(0, 0, 0, 0.3)');
   renderCloud(ctx, CLOUD_X, CLOUD_Y, '#ffffff');
 
@@ -78,14 +104,20 @@ window.renderStatistics = function (ctx, players, times) {
   renderText(ctx, CLOUD_X + GAP * 2, CLOUD_Y + GAP * 2, congratulationsTextArr);
 
   var maxTime = Math.max.apply(null, times);
+
   for (var i = 0; i < players.length; i++) {
-    // ctx.fillStyle = '#000';
     var currentPlayerArr = [];
     var currentTimeArr = [];
     currentPlayerArr.push(players[i]);
     currentTimeArr.push(Math.round(times[i]));
     renderText(ctx, (CLOUD_X + GAP * 2) + ((BAR_WIDTH * 2 + GAP) * i), CLOUD_HEIGHT - GAP * 2, currentPlayerArr);
-    renderRect(ctx, (CLOUD_X + GAP * 2) + ((BAR_WIDTH * 2 + GAP) * i), CLOUD_HEIGHT - ((barHeight * times[i]) / maxTime) - textHeight - GAP, BAR_WIDTH, (barHeight * times[i]) / maxTime);
+
+    if (currentPlayerArr[0] === 'Вы') {
+      renderRect(ctx, (CLOUD_X + GAP * 2) + ((BAR_WIDTH * 2 + GAP) * i), CLOUD_HEIGHT - ((barHeight * times[i]) / maxTime) - textHeight - GAP, BAR_WIDTH, (barHeight * times[i]) / maxTime, '#ff0000');
+    } else {
+      renderRect(ctx, (CLOUD_X + GAP * 2) + ((BAR_WIDTH * 2 + GAP) * i), CLOUD_HEIGHT - ((barHeight * times[i]) / maxTime) - textHeight - GAP, BAR_WIDTH, (barHeight * times[i]) / maxTime, getColor('#0000ff', times[i] / maxTime));
+    }
+
     renderText(ctx, (CLOUD_X + GAP * 2) + ((BAR_WIDTH * 2 + GAP) * i), CLOUD_HEIGHT - GAP * 2 - (barHeight * times[i]) / maxTime - textHeight - GAP, currentTimeArr);
   }
 };
