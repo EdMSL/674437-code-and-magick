@@ -59,6 +59,22 @@ function getMaxElement(arr) {
   return maxElement;
 }
 
+function renderGistogramm(ctx, players, times, maxTime, n) {
+  var currentPlayerArr = [];
+  var currentTimeArr = [];
+  currentPlayerArr.push(players[n]);
+  currentTimeArr.push(Math.round(times[n]));
+  renderText(ctx, (CLOUD_X + GAP * 2) + ((BAR_WIDTH * 2 + GAP) * n), CLOUD_HEIGHT - GAP * 2, currentPlayerArr);
+
+  if (currentPlayerArr[0] === 'Вы') {
+    renderRect(ctx, (CLOUD_X + GAP * 2) + ((BAR_WIDTH * 2 + GAP) * n), CLOUD_HEIGHT - ((barHeight * times[n]) / maxTime) - textHeight - GAP, BAR_WIDTH, (barHeight * times[n]) / maxTime, 'rgba(255, 0, 0, 1)');
+  } else {
+    renderRect(ctx, (CLOUD_X + GAP * 2) + ((BAR_WIDTH * 2 + GAP) * n), CLOUD_HEIGHT - ((barHeight * times[n]) / maxTime) - textHeight - GAP, BAR_WIDTH, (barHeight * times[n]) / maxTime, 'rgba(0, 0, 255, ' + (times[n] / maxTime).toFixed(2) + ')');
+  }
+
+  renderText(ctx, (CLOUD_X + GAP * 2) + ((BAR_WIDTH * 2 + GAP) * n), CLOUD_HEIGHT - GAP * 2 - (barHeight * times[n]) / maxTime - textHeight - GAP, currentTimeArr);
+}
+
 window.renderStatistics = function (ctx, players, times) {
   if (players.length !== times.length) {
     players.length = times.length = Math.min(players.length, times.length);
@@ -73,18 +89,6 @@ window.renderStatistics = function (ctx, players, times) {
   var maxTime = getMaxElement(times);
 
   for (var i = 0; i < players.length; i++) {
-    var currentPlayerArr = [];
-    var currentTimeArr = [];
-    currentPlayerArr.push(players[i]);
-    currentTimeArr.push(Math.round(times[i]));
-    renderText(ctx, (CLOUD_X + GAP * 2) + ((BAR_WIDTH * 2 + GAP) * i), CLOUD_HEIGHT - GAP * 2, currentPlayerArr);
-
-    if (currentPlayerArr[0] === 'Вы') {
-      renderRect(ctx, (CLOUD_X + GAP * 2) + ((BAR_WIDTH * 2 + GAP) * i), CLOUD_HEIGHT - ((barHeight * times[i]) / maxTime) - textHeight - GAP, BAR_WIDTH, (barHeight * times[i]) / maxTime, 'rgba(255, 0, 0, 1)');
-    } else {
-      renderRect(ctx, (CLOUD_X + GAP * 2) + ((BAR_WIDTH * 2 + GAP) * i), CLOUD_HEIGHT - ((barHeight * times[i]) / maxTime) - textHeight - GAP, BAR_WIDTH, (barHeight * times[i]) / maxTime, 'rgba(0, 0, 255, ' + (times[i] / maxTime).toFixed(2) + ')');
-    }
-
-    renderText(ctx, (CLOUD_X + GAP * 2) + ((BAR_WIDTH * 2 + GAP) * i), CLOUD_HEIGHT - GAP * 2 - (barHeight * times[i]) / maxTime - textHeight - GAP, currentTimeArr);
+    renderGistogramm(ctx, players, times, maxTime, i);
   }
 };
