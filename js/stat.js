@@ -49,11 +49,11 @@ function getColor(color, modificator) {
     }
 
     for (var i = 0; i < newColor.length; i += 2) {
-      newColorArr.push(newColor.substr(i,2));
+      newColorArr.push(newColor.substr(i, 2));
     }
 
     for (var j = 0; j < newColorArr.length; j++) {
-      newColorArr[j] = Math.round(parseInt(newColorArr[j],16) * modificator);
+      newColorArr[j] = Math.round(parseInt(newColorArr[j], 16) * modificator);
       newColorArr[j] = (newColorArr[j]).toString(16);
 
       if (newColorArr[j].length < 2) {
