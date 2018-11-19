@@ -113,7 +113,7 @@ window.renderStatistics = function (ctx, players, times) {
     renderText(ctx, (CLOUD_X + GAP * 2) + ((BAR_WIDTH * 2 + GAP) * i), CLOUD_HEIGHT - GAP * 2, currentPlayerArr);
 
     if (currentPlayerArr[0] === 'Вы') {
-      renderRect(ctx, (CLOUD_X + GAP * 2) + ((BAR_WIDTH * 2 + GAP) * i), CLOUD_HEIGHT - ((barHeight * times[i]) / maxTime) - textHeight - GAP, BAR_WIDTH, (barHeight * times[i]) / maxTime, '#ff0000');
+      renderRect(ctx, (CLOUD_X + GAP * 2) + ((BAR_WIDTH * 2 + GAP) * i), CLOUD_HEIGHT - ((barHeight * times[i]) / maxTime) - textHeight - GAP, BAR_WIDTH, (barHeight * times[i]) / maxTime, 'rgba(255, 0, 0, 1)');
     } else {
       renderRect(ctx, (CLOUD_X + GAP * 2) + ((BAR_WIDTH * 2 + GAP) * i), CLOUD_HEIGHT - ((barHeight * times[i]) / maxTime) - textHeight - GAP, BAR_WIDTH, (barHeight * times[i]) / maxTime, getColor('#0000ff', times[i] / maxTime));
     }
