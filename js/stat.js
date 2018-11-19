@@ -13,13 +13,9 @@ var LINE_HEIGHT_MODIFICATOR = 4;
 var textStyle = {
   font: '16px PT Mono',
   color: '#000000',
-  fontSize: function () {
-    var fontArr = this.font.split(' ');
-    var fontSize = parseInt(fontArr[0], 10);
-    return fontSize;
-  }
-};
-var textHeight = textStyle.fontSize() + LINE_HEIGHT_MODIFICATOR;
+  fontSize: 16
+}
+var textHeight = textStyle.fontSize + LINE_HEIGHT_MODIFICATOR;
 var barHeight = CLOUD_HEIGHT - GISTOGRAMM_HEIGHT - GAP;
 var congratulationsTextArr = ['Ура, вы победили!', 'Список результатов:'];
 
@@ -39,56 +35,28 @@ function renderCloud(ctx, x, y, color) {
   ctx.fill();
 }
 
-function getColor(color, modificator) {
-  if (color[0] === '#') {
-    var newColor = color.slice(1);
-    var newColorArr = [];
-
-    if (newColor.length !== 6) {
-      return '#000000';
-    }
-
-    for (var i = 0; i < newColor.length; i += 2) {
-      newColorArr.push(newColor.substr(i, 2));
-    }
-
-    for (var j = 0; j < newColorArr.length - 1; j++) {
-      var maxColorValue = 255;
-      var newModificator = maxColorValue - Math.round(maxColorValue / 100 * modificator);
-      newColorArr[j] = Math.round(parseInt(newColorArr[j], 16) + newModificator);
-      newColorArr[j] = (newColorArr[j]).toString(16);
-      newModificator = 0;
-
-      if (newColorArr[j].length < 2) {
-        newColorArr[j] = '0' + newColorArr[j];
-      }
-    }
-
-    return '#' + newColorArr.join('');
-
-  } else {
-    return '#000000';
-  }
-}
-
 function renderText(ctx, x, y, arr, color) {
   for (var i = 0; i < arr.length; i++) {
-    if (color) {
-      ctx.fillStyle = color;
-    } else {
-      ctx.fillStyle = textStyle.color;
-    }
+    ctx.fillStyle = color ? color : textStyle.color;
     ctx.fillText(arr[i], x, y + i * textHeight);
   }
 }
 
 function renderRect(ctx, x, y, width, height, color) {
-  if (color) {
-    ctx.fillStyle = color;
-  } else {
-    ctx.fillStyle = '#000000';
-  }
+  ctx.fillStyle = color ? color : '#000000';
   ctx.fillRect(x, y, width, height);
+}
+
+function getMaxElement(arr) {
+  var maxElement = arr[0];
+
+  for (var i = 1; i < arr.length; i++) {
+    if (arr[i] > maxElement) {
+      maxElement = arr[i];
+    }
+  }
+
+  return maxElement;
 }
 
 window.renderStatistics = function (ctx, players, times) {
@@ -102,7 +70,7 @@ window.renderStatistics = function (ctx, players, times) {
   ctx.textBaseline = 'hanging';
   renderText(ctx, CLOUD_X + GAP * 2, CLOUD_Y + GAP * 2, congratulationsTextArr);
 
-  var maxTime = Math.max.apply(null, times);
+  var maxTime = getMaxElement(times);
 
   for (var i = 0; i < players.length; i++) {
     var currentPlayerArr = [];
@@ -114,7 +82,7 @@ window.renderStatistics = function (ctx, players, times) {
     if (currentPlayerArr[0] === 'Вы') {
       renderRect(ctx, (CLOUD_X + GAP * 2) + ((BAR_WIDTH * 2 + GAP) * i), CLOUD_HEIGHT - ((barHeight * times[i]) / maxTime) - textHeight - GAP, BAR_WIDTH, (barHeight * times[i]) / maxTime, 'rgba(255, 0, 0, 1)');
     } else {
-      renderRect(ctx, (CLOUD_X + GAP * 2) + ((BAR_WIDTH * 2 + GAP) * i), CLOUD_HEIGHT - ((barHeight * times[i]) / maxTime) - textHeight - GAP, BAR_WIDTH, (barHeight * times[i]) / maxTime, getColor('#0000ff', Math.round(times[i] / maxTime * 100)));
+      renderRect(ctx, (CLOUD_X + GAP * 2) + ((BAR_WIDTH * 2 + GAP) * i), CLOUD_HEIGHT - ((barHeight * times[i]) / maxTime) - textHeight - GAP, BAR_WIDTH, (barHeight * times[i]) / maxTime, 'rgba(0, 0, 255, ' + (times[i] / maxTime).toFixed(2) + ')');
     }
 
     renderText(ctx, (CLOUD_X + GAP * 2) + ((BAR_WIDTH * 2 + GAP) * i), CLOUD_HEIGHT - GAP * 2 - (barHeight * times[i]) / maxTime - textHeight - GAP, currentTimeArr);
