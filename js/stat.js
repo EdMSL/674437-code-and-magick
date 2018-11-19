@@ -14,7 +14,7 @@ var textStyle = {
   font: '16px PT Mono',
   color: '#000000',
   fontSize: 16
-}
+};
 var textHeight = textStyle.fontSize + LINE_HEIGHT_MODIFICATOR;
 var barHeight = CLOUD_HEIGHT - GISTOGRAMM_HEIGHT - GAP;
 var congratulationsTextArr = ['Ура, вы победили!', 'Список результатов:'];
