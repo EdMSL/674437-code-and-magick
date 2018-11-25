@@ -59,7 +59,11 @@ function renderListOfSimilarWizards(wizardsList) {
   similarWizardsList.appendChild(fragment);
 }
 
-setup.classList.remove('hidden');
-setupSimilar.classList.remove('hidden');
+function showElement(element) {
+  element.classList.remove('hidden');
+}
+
+showElement(setup);
+showElement(setupSimilar);
 
 renderListOfSimilarWizards(generateListOfSimilarWizards(totalSimilarWizards));
