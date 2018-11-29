@@ -1,5 +1,8 @@
 'use strict';
 
+var ENTER_KEY_CODE = 13;
+var ESC_KEY_CODE = 27;
+
 var setup = document.querySelector('.setup');
 var setupSimilar = document.querySelector('.setup-similar');
 var totalSimilarWizards = 4;
@@ -7,6 +10,11 @@ var availableNamesOfWizard = ['Иван', 'Хуан Себастьян', 'Мар
 var availableSurnamesOfWizard = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
 var availableCoatColor = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
 var availableEyesColor = ['black', 'red', 'blue', 'yellow', 'green'];
+
+var openSetupButton = document.querySelector('.setup-open-icon');
+var closeSetupButton = document.querySelector('.setup-close');
+var wizardNameInput = setup.querySelector('.setup-user-name');
+var submitButton = setup.querySelector('.setup-submit');
 
 function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -63,7 +71,66 @@ function showElement(element) {
   element.classList.remove('hidden');
 }
 
-showElement(setup);
-showElement(setupSimilar);
+function closeElement(element) {
+  element.classList.add('hidden');
+}
+
+function onOpenSetupButtonClick() {
+  showElement(setup);
+  showElement(setupSimilar);
+}
+
+function onCloseSetupButtonClick() {
+  closeElement(setup);
+  closeElement(setupSimilar);
+}
+
+function onCloseSetupButtonKeydown(evt) {
+  if (evt.keyCode === ENTER_KEY_CODE) {
+    closeElement(setup);
+    closeElement(setupSimilar);
+  }
+}
+
+function onOpenSetupButtonKeydown(evt) {
+  if (evt.keyCode === ENTER_KEY_CODE) {
+    showElement(setup);
+    showElement(setupSimilar);
+  }
+}
+
+var onOpenSetupKeydown = function (evt) {
+  if (evt.keyCode === ESC_KEY_CODE) {
+    closeElement(setup);
+    closeElement(setupSimilar);
+  }
+};
+
+function onNameInputFocus() {
+  if (wizardNameInput.focus) {
+    document.removeEventListener('keydown', onOpenSetupKeydown);
+  }
+}
+
+function onNameInputBlur() {
+  if (wizardNameInput.blur) {
+    document.addEventListener('keydown', onOpenSetupKeydown);
+  }
+}
+
+function onSubmitButtonKeydown(evt) {
+  if (evt.keyCode !== ENTER_KEY_CODE) {
+    return false;
+  }
+}
+
+openSetupButton.addEventListener('click', onOpenSetupButtonClick);
+openSetupButton.addEventListener('keydown', onOpenSetupButtonKeydown);
+closeSetupButton.addEventListener('click', onCloseSetupButtonClick);
+closeSetupButton.addEventListener('keydown', onCloseSetupButtonKeydown);
+document.addEventListener('keydown', onOpenSetupKeydown);
+wizardNameInput.addEventListener('focus', onNameInputFocus);
+wizardNameInput.addEventListener('blur', onNameInputBlur);
+submitButton.addEventListener('keydown', onSubmitButtonKeydown);
 
 renderListOfSimilarWizards(generateListOfSimilarWizards(totalSimilarWizards));
