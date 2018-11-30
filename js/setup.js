@@ -135,14 +135,18 @@ function onPlayerWizardFireballClick() {
   playerWizardFireball.style.backgroundColor = playerWizardFireballInput.value = availableFireballColor[getRandomNumber(0, availableFireballColor.length - 1)];
 }
 
+function setPlayerSetupListeners() {
+  openSetupButton.addEventListener('click', onOpenSetupButtonClick);
+  openSetupButton.addEventListener('keydown', onOpenSetupButtonKeydown);
+  closeSetupButton.addEventListener('click', onCloseSetupButtonClick);
+  closeSetupButton.addEventListener('keydown', onCloseSetupButtonKeydown);
+  wizardNameInput.addEventListener('focus', onNameInputFocus);
+  wizardNameInput.addEventListener('blur', onNameInputBlur);
+  playerWizardCoat.addEventListener('click', onPlayerWizardCoatClick);
+  playerWizardEyes.addEventListener('click', onPlayerWizardEyesClick);
+  playerWizardFireball.addEventListener('click', onPlayerWizardFireballClick);
+}
+
 renderListOfSimilarWizards(generateListOfSimilarWizards(totalSimilarWizards));
 
-openSetupButton.addEventListener('click', onOpenSetupButtonClick);
-openSetupButton.addEventListener('keydown', onOpenSetupButtonKeydown);
-closeSetupButton.addEventListener('click', onCloseSetupButtonClick);
-closeSetupButton.addEventListener('keydown', onCloseSetupButtonKeydown);
-wizardNameInput.addEventListener('focus', onNameInputFocus);
-wizardNameInput.addEventListener('blur', onNameInputBlur);
-playerWizardCoat.addEventListener('click', onPlayerWizardCoatClick);
-playerWizardEyes.addEventListener('click', onPlayerWizardEyesClick);
-playerWizardFireball.addEventListener('click', onPlayerWizardFireballClick);
+setPlayerSetupListeners();
