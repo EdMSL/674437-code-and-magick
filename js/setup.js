@@ -10,11 +10,17 @@ var availableNamesOfWizard = ['Иван', 'Хуан Себастьян', 'Мар
 var availableSurnamesOfWizard = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
 var availableCoatColor = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
 var availableEyesColor = ['black', 'red', 'blue', 'yellow', 'green'];
+var availableFireballColor = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
 
-var openSetupButton = document.querySelector('.setup-open-icon');
+var openSetupButton = document.querySelector('.setup-open');
 var closeSetupButton = document.querySelector('.setup-close');
 var wizardNameInput = setup.querySelector('.setup-user-name');
-var submitButton = setup.querySelector('.setup-submit');
+var playerWizardCoat = setup.querySelector('.setup-wizard .wizard-coat');
+var playerWizardCoatInput = setup.querySelector('.setup-player [name="coat-color"]');
+var playerWizardEyes = setup.querySelector('.setup-wizard .wizard-eyes');
+var playerWizardEyesInput = setup.querySelector('.setup-player [name="eyes-color"]');
+var playerWizardFireball = setup.querySelector('.setup-fireball-wrap');
+var playerWizardFireballInput = setup.querySelector('.setup-fireball-wrap [name="fireball-color"]');
 
 function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -67,42 +73,41 @@ function renderListOfSimilarWizards(wizardsList) {
   similarWizardsList.appendChild(fragment);
 }
 
-function showElement(element) {
-  element.classList.remove('hidden');
+function openSetup() {
+  setup.classList.remove('hidden');
+  setupSimilar.classList.remove('hidden');
+  document.addEventListener('keydown', onOpenSetupKeydown);
 }
 
-function closeElement(element) {
-  element.classList.add('hidden');
+function closeSetup() {
+  setup.classList.add('hidden');
+  setupSimilar.classList.add('hidden');
+  document.removeEventListener('keydown', onOpenSetupKeydown);
 }
 
 function onOpenSetupButtonClick() {
-  showElement(setup);
-  showElement(setupSimilar);
+  openSetup();
 }
 
 function onCloseSetupButtonClick() {
-  closeElement(setup);
-  closeElement(setupSimilar);
+  closeSetup();
 }
 
 function onCloseSetupButtonKeydown(evt) {
   if (evt.keyCode === ENTER_KEY_CODE) {
-    closeElement(setup);
-    closeElement(setupSimilar);
+    closeSetup();
   }
 }
 
 function onOpenSetupButtonKeydown(evt) {
   if (evt.keyCode === ENTER_KEY_CODE) {
-    showElement(setup);
-    showElement(setupSimilar);
+    openSetup();
   }
 }
 
 var onOpenSetupKeydown = function (evt) {
   if (evt.keyCode === ESC_KEY_CODE) {
-    closeElement(setup);
-    closeElement(setupSimilar);
+    closeSetup();
   }
 };
 
@@ -118,19 +123,26 @@ function onNameInputBlur() {
   }
 }
 
-function onSubmitButtonKeydown(evt) {
-  if (evt.keyCode !== ENTER_KEY_CODE) {
-    return false;
-  }
+function onPlayerWizardCoatClick() {
+  playerWizardCoat.style.fill = playerWizardCoatInput.value = availableCoatColor[getRandomNumber(0, availableCoatColor.length - 1)];
 }
+
+function onPlayerWizardEyesClick() {
+  playerWizardEyes.style.fill = playerWizardEyesInput.value = availableEyesColor[getRandomNumber(0, availableEyesColor.length - 1)];
+}
+
+function onPlayerWizardFireballClick() {
+  playerWizardFireball.style.backgroundColor = playerWizardFireballInput.value = availableFireballColor[getRandomNumber(0, availableFireballColor.length - 1)];
+}
+
+renderListOfSimilarWizards(generateListOfSimilarWizards(totalSimilarWizards));
 
 openSetupButton.addEventListener('click', onOpenSetupButtonClick);
 openSetupButton.addEventListener('keydown', onOpenSetupButtonKeydown);
 closeSetupButton.addEventListener('click', onCloseSetupButtonClick);
 closeSetupButton.addEventListener('keydown', onCloseSetupButtonKeydown);
-document.addEventListener('keydown', onOpenSetupKeydown);
 wizardNameInput.addEventListener('focus', onNameInputFocus);
 wizardNameInput.addEventListener('blur', onNameInputBlur);
-submitButton.addEventListener('keydown', onSubmitButtonKeydown);
-
-renderListOfSimilarWizards(generateListOfSimilarWizards(totalSimilarWizards));
+playerWizardCoat.addEventListener('click', onPlayerWizardCoatClick);
+playerWizardEyes.addEventListener('click', onPlayerWizardEyesClick);
+playerWizardFireball.addEventListener('click', onPlayerWizardFireballClick);
