@@ -83,6 +83,8 @@ function closeSetup() {
   setup.classList.add('hidden');
   setupSimilar.classList.add('hidden');
   document.removeEventListener('keydown', onOpenSetupKeydown);
+  setup.style.left = '';
+  setup.style.top = '';
 }
 
 function onOpenSetupButtonClick() {
