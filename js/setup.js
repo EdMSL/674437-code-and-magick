@@ -1,154 +1,152 @@
 'use strict';
 
-var ENTER_KEY_CODE = 13;
-var ESC_KEY_CODE = 27;
+(function () {
 
-var setup = document.querySelector('.setup');
-var setupSimilar = document.querySelector('.setup-similar');
-var totalSimilarWizards = 4;
-var availableNamesOfWizard = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
-var availableSurnamesOfWizard = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
-var availableCoatColor = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
-var availableEyesColor = ['black', 'red', 'blue', 'yellow', 'green'];
-var availableFireballColor = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
+  var setup = document.querySelector('.setup');
+  var setupSimilar = document.querySelector('.setup-similar');
+  var totalSimilarWizards = 4;
+  var availableNamesOfWizard = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
+  var availableSurnamesOfWizard = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
+  var availableCoatColor = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
+  var availableEyesColor = ['black', 'red', 'blue', 'yellow', 'green'];
+  var availableFireballColor = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
 
-var openSetupButton = document.querySelector('.setup-open');
-var closeSetupButton = document.querySelector('.setup-close');
-var wizardNameInput = setup.querySelector('.setup-user-name');
-var playerWizardCoat = setup.querySelector('.setup-wizard .wizard-coat');
-var playerWizardCoatInput = setup.querySelector('.setup-player [name="coat-color"]');
-var playerWizardEyes = setup.querySelector('.setup-wizard .wizard-eyes');
-var playerWizardEyesInput = setup.querySelector('.setup-player [name="eyes-color"]');
-var playerWizardFireball = setup.querySelector('.setup-fireball-wrap');
-var playerWizardFireballInput = setup.querySelector('.setup-fireball-wrap [name="fireball-color"]');
+  var openSetupButton = document.querySelector('.setup-open');
+  var closeSetupButton = document.querySelector('.setup-close');
+  var wizardNameInput = setup.querySelector('.setup-user-name');
+  var playerWizardCoat = setup.querySelector('.setup-wizard .wizard-coat');
+  var playerWizardCoatInput = setup.querySelector('.setup-player [name="coat-color"]');
+  var playerWizardEyes = setup.querySelector('.setup-wizard .wizard-eyes');
+  var playerWizardEyesInput = setup.querySelector('.setup-player [name="eyes-color"]');
+  var playerWizardFireball = setup.querySelector('.setup-fireball-wrap');
+  var playerWizardFireballInput = setup.querySelector('.setup-fireball-wrap [name="fireball-color"]');
 
-function getRandomNumber(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function generateWizardName(names, surnames) {
-  return names[getRandomNumber(0, names.length - 1)] + ' ' + surnames[getRandomNumber(0, surnames.length - 1)];
-}
-
-function generateSimilarWizardData() {
-  var similarWizard = {};
-
-  similarWizard.name = generateWizardName(availableNamesOfWizard, availableSurnamesOfWizard);
-  similarWizard.coatColor = availableCoatColor[getRandomNumber(0, availableCoatColor.length - 1)];
-  similarWizard.eyesColor = availableEyesColor[getRandomNumber(0, availableEyesColor.length - 1)];
-
-  return similarWizard;
-}
-
-function generateListOfSimilarWizards(totalWizards) {
-  var wizardsList = [];
-  for (var i = 0; i < totalWizards; i++) {
-    wizardsList.push(generateSimilarWizardData());
-  }
-  return wizardsList;
-}
-
-function generateSimilarWizardsListElement(wizardElement) {
-  var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
-  var similarWizardElement = similarWizardTemplate.cloneNode(true);
-  var similarWizardName = similarWizardElement.querySelector('.setup-similar-label');
-  var similarWizardCoatColor = similarWizardElement.querySelector('.wizard-coat');
-  var similarWizardEyesColor = similarWizardElement.querySelector('.wizard-eyes');
-
-  similarWizardName.textContent = wizardElement.name;
-  similarWizardCoatColor.style.fill = wizardElement.coatColor;
-  similarWizardEyesColor.style.fill = wizardElement.eyesColor;
-
-  return similarWizardElement;
-}
-
-function renderListOfSimilarWizards(wizardsList) {
-  var similarWizardsList = document.querySelector('.setup-similar-list');
-  var fragment = document.createDocumentFragment();
-
-  for (var i = 0; i < wizardsList.length; i++) {
-    fragment.appendChild(generateSimilarWizardsListElement(wizardsList[i]));
+  // function generateWizardName(names, surnames) {
+  //   return names[window.utils.getRandomNumber(0, names.length - 1)] + ' ' + surnames[window.utils.getRandomNumber(0, surnames.length - 1)];
+  // }
+  function generateWizardName(names, surnames) {
+    return window.utils.getRandomValueFromArray(names) + ' ' + window.utils.getRandomValueFromArray(surnames);
   }
 
-  similarWizardsList.appendChild(fragment);
-}
+  function generateSimilarWizardData() {
+    var similarWizard = {};
 
-function openSetup() {
-  setup.classList.remove('hidden');
-  setupSimilar.classList.remove('hidden');
-  document.addEventListener('keydown', onOpenSetupKeydown);
-}
+    similarWizard.name = generateWizardName(availableNamesOfWizard, availableSurnamesOfWizard);
+    // similarWizard.coatColor = availableCoatColor[window.utils.getRandomNumber(0, availableCoatColor.length - 1)];
+    similarWizard.coatColor = window.utils.getRandomValueFromArray(availableCoatColor);
+    // similarWizard.eyesColor = availableEyesColor[window.utils.getRandomNumber(0, availableEyesColor.length - 1)];
+    similarWizard.eyesColor = window.utils.getRandomValueFromArray(availableEyesColor);
 
-function closeSetup() {
-  setup.classList.add('hidden');
-  setupSimilar.classList.add('hidden');
-  document.removeEventListener('keydown', onOpenSetupKeydown);
-  setup.style.left = '';
-  setup.style.top = '';
-}
-
-function onOpenSetupButtonClick() {
-  openSetup();
-}
-
-function onCloseSetupButtonClick() {
-  closeSetup();
-}
-
-function onCloseSetupButtonKeydown(evt) {
-  if (evt.keyCode === ENTER_KEY_CODE) {
-    closeSetup();
+    return similarWizard;
   }
-}
 
-function onOpenSetupButtonKeydown(evt) {
-  if (evt.keyCode === ENTER_KEY_CODE) {
-    openSetup();
+  function generateListOfSimilarWizards(totalWizards) {
+    var wizardsList = [];
+    for (var i = 0; i < totalWizards; i++) {
+      wizardsList.push(generateSimilarWizardData());
+    }
+    return wizardsList;
   }
-}
 
-var onOpenSetupKeydown = function (evt) {
-  if (evt.keyCode === ESC_KEY_CODE) {
-    closeSetup();
+  function generateSimilarWizardsListElement(wizardElement) {
+    var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
+    var similarWizardElement = similarWizardTemplate.cloneNode(true);
+    var similarWizardName = similarWizardElement.querySelector('.setup-similar-label');
+    var similarWizardCoatColor = similarWizardElement.querySelector('.wizard-coat');
+    var similarWizardEyesColor = similarWizardElement.querySelector('.wizard-eyes');
+
+    similarWizardName.textContent = wizardElement.name;
+    similarWizardCoatColor.style.fill = wizardElement.coatColor;
+    similarWizardEyesColor.style.fill = wizardElement.eyesColor;
+
+    return similarWizardElement;
   }
-};
 
-function onNameInputFocus() {
-  if (wizardNameInput.focus) {
-    document.removeEventListener('keydown', onOpenSetupKeydown);
+  function renderListOfSimilarWizards(wizardsList) {
+    var similarWizardsList = document.querySelector('.setup-similar-list');
+    var fragment = document.createDocumentFragment();
+
+    for (var i = 0; i < wizardsList.length; i++) {
+      fragment.appendChild(generateSimilarWizardsListElement(wizardsList[i]));
+    }
+
+    similarWizardsList.appendChild(fragment);
   }
-}
 
-function onNameInputBlur() {
-  if (wizardNameInput.blur) {
+  function openSetup() {
+    setup.classList.remove('hidden');
+    setupSimilar.classList.remove('hidden');
     document.addEventListener('keydown', onOpenSetupKeydown);
   }
-}
 
-function onPlayerWizardCoatClick() {
-  playerWizardCoat.style.fill = playerWizardCoatInput.value = availableCoatColor[getRandomNumber(0, availableCoatColor.length - 1)];
-}
+  function closeSetup() {
+    setup.classList.add('hidden');
+    setupSimilar.classList.add('hidden');
+    document.removeEventListener('keydown', onOpenSetupKeydown);
+    setup.style.left = '';
+    setup.style.top = '';
+  }
 
-function onPlayerWizardEyesClick() {
-  playerWizardEyes.style.fill = playerWizardEyesInput.value = availableEyesColor[getRandomNumber(0, availableEyesColor.length - 1)];
-}
+  function onOpenSetupButtonClick() {
+    openSetup();
+  }
 
-function onPlayerWizardFireballClick() {
-  playerWizardFireball.style.backgroundColor = playerWizardFireballInput.value = availableFireballColor[getRandomNumber(0, availableFireballColor.length - 1)];
-}
+  function onCloseSetupButtonClick() {
+    closeSetup();
+  }
 
-function setPlayerSetupListeners() {
-  openSetupButton.addEventListener('click', onOpenSetupButtonClick);
-  openSetupButton.addEventListener('keydown', onOpenSetupButtonKeydown);
-  closeSetupButton.addEventListener('click', onCloseSetupButtonClick);
-  closeSetupButton.addEventListener('keydown', onCloseSetupButtonKeydown);
-  wizardNameInput.addEventListener('focus', onNameInputFocus);
-  wizardNameInput.addEventListener('blur', onNameInputBlur);
-  playerWizardCoat.addEventListener('click', onPlayerWizardCoatClick);
-  playerWizardEyes.addEventListener('click', onPlayerWizardEyesClick);
-  playerWizardFireball.addEventListener('click', onPlayerWizardFireballClick);
-}
+  function onCloseSetupButtonKeydown(evt) {
+    window.utils.isEnterEvent(evt, closeSetup);
+  }
 
-renderListOfSimilarWizards(generateListOfSimilarWizards(totalSimilarWizards));
+  function onOpenSetupButtonKeydown(evt) {
+    window.utils.isEnterEvent(evt, openSetup);
+  }
 
-setPlayerSetupListeners();
+  var onOpenSetupKeydown = function (evt) {
+    window.utils.isEscEvent(evt, closeSetup);
+  };
+
+  function onNameInputFocus() {
+    if (wizardNameInput.focus) {
+      document.removeEventListener('keydown', onOpenSetupKeydown);
+    }
+  }
+
+  function onNameInputBlur() {
+    if (wizardNameInput.blur) {
+      document.addEventListener('keydown', onOpenSetupKeydown);
+    }
+  }
+
+  function onPlayerWizardCoatClick() {
+    // playerWizardCoat.style.fill = playerWizardCoatInput.value = availableCoatColor[window.utils.getRandomNumber(0, availableCoatColor.length - 1)];
+    playerWizardCoat.style.fill = playerWizardCoatInput.value = window.utils.getRandomValueFromArray(availableCoatColor);
+  }
+
+  function onPlayerWizardEyesClick() {
+    // playerWizardEyes.style.fill = playerWizardEyesInput.value = availableEyesColor[window.utils.getRandomNumber(0, availableEyesColor.length - 1)];
+    playerWizardEyes.style.fill = playerWizardEyesInput.value = window.utils.getRandomValueFromArray(availableEyesColor);
+  }
+
+  function onPlayerWizardFireballClick() {
+    // playerWizardFireball.style.backgroundColor = playerWizardFireballInput.value = availableFireballColor[window.utils.getRandomNumber(0, availableFireballColor.length - 1)];
+    playerWizardFireball.style.backgroundColor = playerWizardFireballInput.value = window.utils.getRandomValueFromArray(availableFireballColor);
+  }
+
+  function setPlayerSetupListeners() {
+    openSetupButton.addEventListener('click', onOpenSetupButtonClick);
+    openSetupButton.addEventListener('keydown', onOpenSetupButtonKeydown);
+    closeSetupButton.addEventListener('click', onCloseSetupButtonClick);
+    closeSetupButton.addEventListener('keydown', onCloseSetupButtonKeydown);
+    wizardNameInput.addEventListener('focus', onNameInputFocus);
+    wizardNameInput.addEventListener('blur', onNameInputBlur);
+    playerWizardCoat.addEventListener('click', onPlayerWizardCoatClick);
+    playerWizardEyes.addEventListener('click', onPlayerWizardEyesClick);
+    playerWizardFireball.addEventListener('click', onPlayerWizardFireballClick);
+  }
+
+  renderListOfSimilarWizards(generateListOfSimilarWizards(totalSimilarWizards));
+
+  setPlayerSetupListeners();
+})();
