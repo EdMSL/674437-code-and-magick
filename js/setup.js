@@ -21,9 +21,6 @@
   var playerWizardFireball = setup.querySelector('.setup-fireball-wrap');
   var playerWizardFireballInput = setup.querySelector('.setup-fireball-wrap [name="fireball-color"]');
 
-  // function generateWizardName(names, surnames) {
-  //   return names[window.utils.getRandomNumber(0, names.length - 1)] + ' ' + surnames[window.utils.getRandomNumber(0, surnames.length - 1)];
-  // }
   function generateWizardName(names, surnames) {
     return window.utils.getRandomValueFromArray(names) + ' ' + window.utils.getRandomValueFromArray(surnames);
   }
@@ -32,9 +29,7 @@
     var similarWizard = {};
 
     similarWizard.name = generateWizardName(availableNamesOfWizard, availableSurnamesOfWizard);
-    // similarWizard.coatColor = availableCoatColor[window.utils.getRandomNumber(0, availableCoatColor.length - 1)];
     similarWizard.coatColor = window.utils.getRandomValueFromArray(availableCoatColor);
-    // similarWizard.eyesColor = availableEyesColor[window.utils.getRandomNumber(0, availableEyesColor.length - 1)];
     similarWizard.eyesColor = window.utils.getRandomValueFromArray(availableEyesColor);
 
     return similarWizard;
@@ -120,17 +115,14 @@
   }
 
   function onPlayerWizardCoatClick() {
-    // playerWizardCoat.style.fill = playerWizardCoatInput.value = availableCoatColor[window.utils.getRandomNumber(0, availableCoatColor.length - 1)];
     playerWizardCoat.style.fill = playerWizardCoatInput.value = window.utils.getRandomValueFromArray(availableCoatColor);
   }
 
   function onPlayerWizardEyesClick() {
-    // playerWizardEyes.style.fill = playerWizardEyesInput.value = availableEyesColor[window.utils.getRandomNumber(0, availableEyesColor.length - 1)];
     playerWizardEyes.style.fill = playerWizardEyesInput.value = window.utils.getRandomValueFromArray(availableEyesColor);
   }
 
   function onPlayerWizardFireballClick() {
-    // playerWizardFireball.style.backgroundColor = playerWizardFireballInput.value = availableFireballColor[window.utils.getRandomNumber(0, availableFireballColor.length - 1)];
     playerWizardFireball.style.backgroundColor = playerWizardFireballInput.value = window.utils.getRandomValueFromArray(availableFireballColor);
   }
 

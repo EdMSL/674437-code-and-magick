@@ -48,18 +48,6 @@
     ctx.fillRect(x, y, width, height);
   }
 
-  function getMaxElement(arr) {
-    var maxElement = arr[0];
-
-    for (var i = 1; i < arr.length; i++) {
-      if (arr[i] > maxElement) {
-        maxElement = arr[i];
-      }
-    }
-
-    return maxElement;
-  }
-
   function renderGistogramm(ctx, players, times, maxTime, n) {
     var currentPlayerArr = [];
     var currentTimeArr = [];
@@ -87,7 +75,7 @@
     ctx.textBaseline = 'hanging';
     renderText(ctx, CLOUD_X + GAP * 2, CLOUD_Y + GAP * 2, congratulationsTextArr);
 
-    var maxTime = getMaxElement(times);
+    var maxTime = window.utils.getMaxElementFromArray(times);
 
     for (var i = 0; i < players.length; i++) {
       renderGistogramm(ctx, players, times, maxTime, i);
