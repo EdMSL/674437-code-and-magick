@@ -3,6 +3,7 @@
 (function () {
 
   var setup = document.querySelector('.setup');
+  var setupForm = setup.querySelector('.setup-wizard-form');
   var setupSimilar = document.querySelector('.setup-similar');
   var totalSimilarWizards = 4;
   var availableNamesOfWizard = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
@@ -141,4 +142,17 @@
   renderListOfSimilarWizards(generateListOfSimilarWizards(totalSimilarWizards));
 
   setPlayerSetupListeners();
+
+  setupForm.addEventListener('submit', function (evt) {
+    window.backend.save(new FormData(setupForm), onSuccess, onError);
+    evt.preventDefault();
+  });
+
+  var onError = function (message) {
+    console.error(message);
+  };
+  var onSuccess = function (message) {
+    closeSetup();
+    console.log(message);
+  };
 })();
