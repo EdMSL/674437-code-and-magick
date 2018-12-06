@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var ERROR_BLOCK_TIMEOUT = 3000;
 
   var setup = document.querySelector('.setup');
   var setupForm = setup.querySelector('.setup-wizard-form');
@@ -19,6 +20,7 @@
   var playerWizardEyesInput = setup.querySelector('.setup-player [name="eyes-color"]');
   var playerWizardFireball = setup.querySelector('.setup-fireball-wrap');
   var playerWizardFireballInput = setup.querySelector('.setup-fireball-wrap [name="fireball-color"]');
+
 
   function generateSimilarWizardsListElement(wizardElement) {
     var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
@@ -128,7 +130,7 @@
     document.body.insertAdjacentElement('afterbegin', errorBlock);
     setTimeout(function () {
       document.body.removeChild(errorBlock);
-    }, 3000);
+    }, ERROR_BLOCK_TIMEOUT);
   }
 
   function onErrorSave(message) {
@@ -140,7 +142,7 @@
   }
 
   setupForm.addEventListener('submit', function (evt) {
-    window.backend.save(new FormData(setupForm), onSuccessSave, onErrorSave);
+    window.backend.save('https://js.dump.academy/code-and-magick', new FormData(setupForm), onSuccessSave, onErrorSave);
     evt.preventDefault();
   });
 
@@ -152,5 +154,5 @@
     showErrorBlock(message);
   }
 
-  window.backend.load(onSuccessLoad, onErrorLoad);
+  window.backend.load('https://js.dump.academy/code-and-magick/data', onSuccessLoad, onErrorLoad);
 })();

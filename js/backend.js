@@ -1,27 +1,34 @@
 'use strict';
 
 (function () {
+  var REQUEST_TIMEOUT = 10000;
+  var REQUEST_STATUS_OK = 200;
+  var REQUEST_STATUS_BAD_REQUEST = 400;
+  var REQUEST_STATUS_UNAUTHORIZEDS = 401;
+  var REQUEST_STATUS_NOT_FOUND = 404;
+  var REQUEST_STATUS_INTERNAL_STATUS_ERROR = 500;
+
   window.backend = {
-    load: function (onLoad, onError) {
+    load: function (url, onLoad, onError) {
       var xhr = new XMLHttpRequest();
       xhr.responseType = 'json';
 
       xhr.addEventListener('load', function () {
         var error;
         switch (xhr.status) {
-          case 200:
+          case REQUEST_STATUS_OK:
             onLoad(xhr.response);
             break;
-          case 400:
+          case REQUEST_STATUS_BAD_REQUEST:
             error = xhr.status + ': Неверный запрос';
             break;
-          case 401:
+          case REQUEST_STATUS_UNAUTHORIZEDS:
             error = xhr.status + ': Пользователь не авторизован';
             break;
-          case 404:
+          case REQUEST_STATUS_NOT_FOUND:
             error = xhr.status + ': Страница с волшебниками не найдена';
             break;
-          case 500:
+          case REQUEST_STATUS_INTERNAL_STATUS_ERROR:
             error = xhr.status + ': Неверный адрес для отправки';
             break;
           default:
@@ -40,31 +47,31 @@
         onError('Превышено время ожидания. Пожалуйста, попробуйте позднее');
       });
 
-      xhr.timeout = 10000;
+      xhr.timeout = REQUEST_TIMEOUT;
 
-      xhr.open('GET', 'https://js.dump.academy/code-and-magick/data');
+      xhr.open('GET', url);
       xhr.send();
     },
-    save: function (data, onLoad, onError) {
+    save: function (url, data, onLoad, onError) {
       var xhr = new XMLHttpRequest();
       xhr.responseType = 'json';
 
       xhr.addEventListener('load', function () {
         var error;
         switch (xhr.status) {
-          case 200:
+          case REQUEST_STATUS_OK:
             onLoad();
             break;
-          case 400:
+          case REQUEST_STATUS_BAD_REQUEST:
             error = xhr.status + ': Неверный запрос';
             break;
-          case 401:
+          case REQUEST_STATUS_UNAUTHORIZEDS:
             error = xhr.status + ': Пользователь не авторизован';
             break;
-          case 404:
+          case REQUEST_STATUS_NOT_FOUND:
             error = xhr.status + ': Ничего не найдено';
             break;
-          case 500:
+          case REQUEST_STATUS_INTERNAL_STATUS_ERROR:
             error = xhr.status + ': Неверный адрес для отправки';
             break;
           default:
@@ -85,7 +92,7 @@
 
       xhr.timeout = 10000;
 
-      xhr.open('POST', 'https://js.dump.academy/code-and-magick');
+      xhr.open('POST', url);
       xhr.send(data);
     },
   };
