@@ -1,37 +1,48 @@
 'use strict';
 
 (function () {
-  var URL = 'https://js.dump.academy/code-and-magick';
-
-  function onLoadSucces(data) {
-    return data;
-  }
-  function onSaveSucces() {
-
-  }
-
-  function onSubmitFormLoad(xhr, data, success, fail) {
-    if (xhr.status === 200) {
-      success(xhr.response);
-    } else {
-      fail('Ошибка: ' + xhr.status + ' ' + xhr.statusText);
-    }
-  }
-
   window.backend = {
     load: function (onLoad, onError) {
       var xhr = new XMLHttpRequest();
       xhr.responseType = 'json';
 
       xhr.addEventListener('load', function () {
-        if (xhr.status === 200) {
-          onLoad(xhr.response);
-        } else {
-          onError('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
+        var error;
+        switch (xhr.status) {
+          case 200:
+            onLoad(xhr.response);
+            break;
+          case 400:
+            error = xhr.status + ': Неверный запрос';
+            break;
+          case 401:
+            error = xhr.status + ': Пользователь не авторизован';
+            break;
+          case 404:
+            error = xhr.status + ': Страница с волшебниками не найдена';
+            break;
+          case 500:
+            error = xhr.status + ': Неверный адрес для отправки';
+            break;
+          default:
+            error = xhr.status + ': Произошла ошибка при попытке загрузить список волшебников. Пожалуйста,  обновите страницу';
+        }
+
+        if (error) {
+          onError(error);
         }
       });
 
-      xhr.open('GET', URL);
+      xhr.addEventListener('error', function () {
+        onError('Произошла ошибка соединения');
+      });
+      xhr.addEventListener('timeout', function () {
+        onError('Превышено время ожидания. Пожалуйста, попробуйте позднее');
+      });
+
+      xhr.timeout = 10000;
+
+      xhr.open('GET', 'https://js.dump.academy/code-and-magick/data');
       xhr.send();
     },
     save: function (data, onLoad, onError) {
@@ -39,14 +50,42 @@
       xhr.responseType = 'json';
 
       xhr.addEventListener('load', function () {
-        if (xhr.status === 200) {
-          onLoad('Успех!');
-        } else {
-          onError('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText);
+        var error;
+        switch (xhr.status) {
+          case 200:
+            onLoad();
+            break;
+          case 400:
+            error = xhr.status + ': Неверный запрос';
+            break;
+          case 401:
+            error = xhr.status + ': Пользователь не авторизован';
+            break;
+          case 404:
+            error = xhr.status + ': Ничего не найдено';
+            break;
+          case 500:
+            error = xhr.status + ': Неверный адрес для отправки';
+            break;
+          default:
+            error = xhr.status + ': Произошла ошибка при попытке сохранения персонажа, повторите попытку или  попробуйте позднее';
+        }
+
+        if (error) {
+          onError(error);
         }
       });
 
-      xhr.open('POST', URL);
+      xhr.addEventListener('error', function () {
+        onError('Произошла ошибка соединения');
+      });
+      xhr.addEventListener('timeout', function () {
+        onError('Превышено время ожидания. Пожалуйста, попробуйте позднее');
+      });
+
+      xhr.timeout = 10000;
+
+      xhr.open('POST', 'https://js.dump.academy/code-and-magick');
       xhr.send(data);
     },
   };
