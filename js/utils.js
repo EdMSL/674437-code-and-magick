@@ -3,6 +3,7 @@
 (function () {
   var ESC_KEY_CODE = 27;
   var ENTER_KEY_CODE = 13;
+  var ERROR_BLOCK_TIMEOUT = 3000;
 
   window.utils = {
     isEscEvent: function (evt, action) {
@@ -31,6 +32,19 @@
       }
 
       return maxElement;
+    },
+    showErrorBlock: function (message) {
+      var errorBlock = document.createElement('div');
+      errorBlock.id = 'error-block';
+      errorBlock.style = 'z-index: 5; font-size: 15px; background-color: red; padding: 5px;';
+      errorBlock.textContent = message;
+      errorBlock.style.position = 'fixed';
+      errorBlock.style.left = 0;
+      errorBlock.style.top = 0;
+      document.body.insertAdjacentElement('afterbegin', errorBlock);
+      setTimeout(function () {
+        document.body.removeChild(errorBlock);
+      }, ERROR_BLOCK_TIMEOUT);
     }
   };
 })();
