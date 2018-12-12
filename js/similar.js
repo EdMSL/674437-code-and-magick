@@ -35,25 +35,18 @@
   }
 
   function getRank(wizard) {
+    var moreRankStep = 2;
+    var lessRankStep = 1;
     var rank = 0;
 
     if (wizard.colorCoat === coatColor) {
-      rank += 2;
+      rank += moreRankStep;
     }
     if (wizard.colorEyes === eyesColor) {
-      rank += 1;
+      rank += lessRankStep;
     }
 
     return rank;
-  }
-
-  function debounce() {
-    if (lastTimeout) {
-      window.clearTimeout(lastTimeout);
-    }
-    lastTimeout = window.setTimeout(function () {
-      updateWizards();
-    }, DEBOUNCE_INTERVAL);
   }
 
   function updateWizards() {
@@ -68,15 +61,15 @@
     }));
   }
 
-  function onWizardEyesClick(color) {
+  var onWizardEyesClick = window.debounce(function (color) {
     eyesColor = color;
     updateWizards();
-  }
+  });
 
-  function onWizardCoatClick(color) {
+  var onWizardCoatClick = window.debounce(function (color) {
     coatColor = color;
     updateWizards();
-  }
+  });
 
   function onSuccessLoad(data) {
     wizards = data;

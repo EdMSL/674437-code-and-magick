@@ -4,7 +4,6 @@
   var ESC_KEY_CODE = 27;
   var ENTER_KEY_CODE = 13;
   var ERROR_BLOCK_TIMEOUT = 3000;
-  var DEBOUNCE_INTERVAL = 300;
 
   window.utils = {
     isEscEvent: function (evt, action) {
@@ -46,19 +45,6 @@
       setTimeout(function () {
         document.body.removeChild(errorBlock);
       }, ERROR_BLOCK_TIMEOUT);
-    },
-    debounce: function (cb) {
-      var lastTimeout = null;
-
-      return function () {
-        var parameters = arguments;
-        if (lastTimeout) {
-          window.clearTimeout(lastTimeout);
-        }
-        lastTimeout = window.setTimeout(function () {
-          cb.apply(null, parameters);
-        }, DEBOUNCE_INTERVAL);
-      };
     }
   };
 })();
